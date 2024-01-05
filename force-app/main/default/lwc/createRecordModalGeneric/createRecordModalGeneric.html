@@ -1,0 +1,70 @@
+<!-- Generic Component for record creation with lightning modal -->
+<template>
+    <div class="slds-is-relative">
+        <lightning-spinner
+            alternative-text="Loading"
+            size="medium"
+            variant="brand"
+            if:true={isLoading}
+        ></lightning-spinner>
+
+        <lightning-record-edit-form
+            density="compact"
+            object-api-name={objectApiName}
+            record-id={recordId}
+            onsubmit={handleSubmit}
+            onsuccess={handleSuccess}
+            onerror={handleError}
+            onload={handleLoad}
+            is-loading={isLoading}
+        >
+            <lightning-modal-header label={label}></lightning-modal-header>
+            <lightning-modal-body>
+
+                <lightning-layout multiple-rows>
+
+                    <lightning-layout-item
+                        for:each={fields}
+                        for:item="field"
+                        key={field.fieldApiName}
+                        size={layoutItemProps.size}
+                        small-device-size={layoutItemProps.smallDeviceSize}
+                        medium-device-size={layoutItemProps.mediumDeviceSize}
+                        large-device-size={layoutItemProps.largeDeviceSize}
+                        class={layoutItemProps.class}
+                    >
+                        <lightning-input-field
+                            field-name={field.fieldApiName}
+                            data-field-name={field.fieldApiName}
+                            required={field.required}
+                            value={field.initialValue}
+                            variant="standard"
+                            onchange={handleInputChange}
+                            read-only={field.readOnly}
+                        ></lightning-input-field>
+                        <label
+                            class="slds-text-body_regular"
+                            if:true={field.additionalInfo}
+                        >
+                            {field.additionalInfo}
+                        </label>
+                    </lightning-layout-item>
+                </lightning-layout>
+
+            </lightning-modal-body>
+            <lightning-modal-footer>
+                <lightning-button
+                    label="Save"
+                    variant="brand"
+                    type="submit"
+                    class="slds-var-p-right_x-small"
+                ></lightning-button>
+
+                <lightning-button
+                    label="Cancel"
+                    onclick={handleCancel}
+                ></lightning-button>
+            </lightning-modal-footer>
+        </lightning-record-edit-form>
+    </div>
+</template>
